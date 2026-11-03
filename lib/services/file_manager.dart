@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:excel/excel.dart';
@@ -37,6 +38,9 @@ class TheftFileManager {
   }
 
   static Future<List<TheftCaseRecord>> loadTheftCases() async {
+    if (kIsWeb) {
+      return [];
+    }
     final reportsDir = await _reportsDirectory();
     if (!await reportsDir.exists()) {
       return [];
@@ -107,6 +111,11 @@ class TheftFileManager {
     File? idBackImage,
     File? videoFile,
   }) async {
+    if (kIsWeb) {
+      throw UnsupportedError(
+        'حفظ الملفات والتقارير غير مدعوم على نسخة المتصفح. استخدم تطبيق Android.',
+      );
+    }
     String safeName =
         thiefName.replaceAll(RegExp(r'[^\w\s\u0600-\u06FF]'), '').trim();
     if (safeName.isEmpty) safeName = "سارق_مجهول";

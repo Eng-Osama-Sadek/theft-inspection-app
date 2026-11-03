@@ -134,33 +134,48 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView(
                   padding: const EdgeInsets.all(20),
                   children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.bolt,
-                            color: Colors.cyanAccent, size: 30),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            'منظومة فحص سرقات التيار الكهربائي',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final titleSize =
+                            constraints.maxWidth < 360 ? 17.0 : 20.0;
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(top: 4),
+                              child: Icon(Icons.bolt,
+                                  color: Colors.cyanAccent, size: 26),
                             ),
-                          ),
-                        ),
-                        IconButton(
-                          tooltip: 'تحديث المحاضر',
-                          onPressed: _loadCases,
-                          icon: const Icon(
-                            Icons.refresh,
-                            color: Colors.cyanAccent,
-                          ),
-                        ),
-                      ],
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'منظومة فحص سرقات التيار الكهربائي',
+                                maxLines: 2,
+                                overflow: TextOverflow.visible,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: titleSize,
+                                  height: 1.25,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            IconButton(
+                              tooltip: 'تحديث المحاضر',
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(
+                                  minWidth: 36, minHeight: 36),
+                              onPressed: _loadCases,
+                              icon: const Icon(
+                                Icons.refresh,
+                                color: Colors.cyanAccent,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                     const SizedBox(height: 20),
                     TextField(
@@ -298,15 +313,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: _openAddCase,
-                    icon: const Icon(Icons.add, color: Colors.black),
-                    label: const Text(
-                      'إضافة حالة سرقة جديدة',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
+                    icon: const Icon(Icons.add, color: Colors.black, size: 22),
+                    label: const FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        'إضافة حالة سرقة جديدة',
+                        maxLines: 1,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.cyanAccent,
@@ -380,12 +397,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.cyanAccent, size: 20),
               const SizedBox(width: 6),
               Expanded(
-                child: Text(
-                  '$label: $value',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white70),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    '$label: $value',
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white70),
+                  ),
                 ),
               ),
             ],
@@ -404,7 +423,7 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: const Icon(Icons.description, color: Colors.cyanAccent),
         title: Text(
           record.name.isEmpty ? 'محضر بدون اسم' : record.name,
-          maxLines: 1,
+          maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: const TextStyle(color: Colors.white),
         ),
@@ -420,10 +439,18 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         trailing: record.totalRequired == null
             ? null
-            : Text(
-                '${record.totalRequired!.toStringAsFixed(0)} ج.م',
-                style: const TextStyle(
-                    color: Colors.orangeAccent, fontWeight: FontWeight.bold),
+            : ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 82),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    '${record.totalRequired!.toStringAsFixed(0)} ج.م',
+                    style: const TextStyle(
+                      color: Colors.orangeAccent,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
       ),
     );

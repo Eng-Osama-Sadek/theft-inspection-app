@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -43,6 +44,10 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Future<void> _pickImage(bool isFront) async {
+    if (kIsWeb) {
+      _showPickError('التصوير والكاميرا متاحان في تطبيق Android فقط.');
+      return;
+    }
     final pickedFile = await _picker.pickImage(
       source: ImageSource.camera,
       imageQuality: 80,
@@ -60,6 +65,10 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Future<void> _pickVideo() async {
+    if (kIsWeb) {
+      _showPickError('تصوير الفيديو متاح في تطبيق Android فقط.');
+      return;
+    }
     final pickedFile = await _picker.pickVideo(
       source: ImageSource.camera,
       maxDuration: const Duration(minutes: 3),
