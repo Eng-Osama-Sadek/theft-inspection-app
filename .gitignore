@@ -52,3 +52,4 @@ android/app/build/
 .dart_tool/
 .gradle/
 android/.gradle/
+.vercel
